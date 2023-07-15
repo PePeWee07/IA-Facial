@@ -3,7 +3,7 @@ import face_recognition
 import json
 import os
 
-image = "faces/chaly.png"
+image = "faces/1.png"
 imagen_file = cv2.imread(image)
 face_locations = face_recognition.face_locations(imagen_file)
 
