@@ -66,7 +66,7 @@ def upload_file():
         print(image.shape)
         image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
         plt.imshow(image)
-        plt.show()
+        #plt.show()
 
         # Detectar caras en la imagen
         boxes, _ = mtcnn.detect(image)
@@ -82,13 +82,12 @@ def upload_file():
                 face = image[box[1]:box[3], box[0]:box[2], :]
                 cv2.imwrite("faces/" + str(i) + ".png", cv2.cvtColor(face, cv2.COLOR_BGR2RGB))
                 #i += 1
-                cv2.imshow("face", cv2.cvtColor(face, cv2.COLOR_BGR2RGB))
+                #cv2.imshow("face", cv2.cvtColor(face, cv2.COLOR_BGR2RGB))
                 cv2.waitKey(0)
                 
                 
                 #------------Codificar Code: Codificamos cada una de las imagenes------------
                 output_file_faces = "./faces/" + str(i) + ".png"
-                i += 1
                 imagen_file = cv2.imread(output_file_faces)
                 face_locations = face_recognition.face_locations(imagen_file)
 
@@ -107,7 +106,8 @@ def upload_file():
                     
                     # Crear diccionario con la información de la cara
                     face_data = {
-                        base_name: face_image_encodings.tolist()  
+                        base_name: face_image_encodings.tolist(),
+                        'imagen': base64.b64encode(open('./faces/' + str(i) + ".png", 'rb').read()).decode('utf-8'),
                     }
                     print("face_dict:", face_data)
 
@@ -119,6 +119,7 @@ def upload_file():
                         
                     # Agregar el JSON a la lista
                     json_list.append(face_data)
+                    i += 1
                 else:
                     print("No se ha detectado ninguna cara en la imagen")
         
