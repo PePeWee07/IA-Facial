@@ -106,7 +106,7 @@ def upload_file():
                     
                     # Crear diccionario con la información de la cara
                     face_data = {
-                        base_name: face_image_encodings.tolist(),
+                        "encoding": face_image_encodings.tolist(),
                         'imagen': base64.b64encode(open('./faces/' + str(i) + ".png", 'rb').read()).decode('utf-8'),
                     }
                     print("face_dict:", face_data)
@@ -121,10 +121,12 @@ def upload_file():
                     json_list.append(face_data)
                     i += 1
                 else:
-                    print("No se ha detectado ninguna cara en la imagen")
+                    resp = jsonify({'server': "No se ha detectado ninguna cara en la imagen"})
+                    resp.status_code = 201
+                    return resp
         
         
-        resp = jsonify({'message-Server': json_list})
+        resp = jsonify({'server': json_list})
         resp.status_code = 201
         return resp
     
