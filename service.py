@@ -12,9 +12,77 @@ import face_recognition
 import json
 import base64
 
+import numpy as np
+import pymongo
+
 app = Flask(__name__)
 CORS(app)
 
+# Conectarse a la base de datos de MongoDB
+client = pymongo.MongoClient('mongodb://localhost:27017')
+database = client['reconocimiento']
+collection = database['personas']
+
+# Definir la función de similitud de cosenos
+def cosine_similarity(a, b):
+    return np.dot(a, b) / (np.linalg.norm(a) * np.linalg.norm(b))
+
+# Vectorizar la función de similitud de cosenos
+vectorized_cosine_similarity = np.vectorize(cosine_similarity, signature='(n),(m)->()')
+
+
+@app.route('/reconocer', methods=['POST', 'OPTIONS'])
+def reconocer():
+    try:
+        if request.method == 'OPTIONS':
+            # Handle preflight request
+            response = app.make_default_options_response()
+        else:
+            input_encoding_str = request.json['inputEncodingStr']
+
+            # Obtener el encoding de entrada
+            input_encoding = np.array(json.loads(input_encoding_str))
+
+            # Obtener todos los encodings de la colección
+            encodings = []
+            for doc in collection.find({}, {'encoding': 1}):
+                encoding_str = doc['encoding']
+                encoding = np.array(json.loads(encoding_str))
+                encodings.append(encoding)
+
+            # Calcular las similitudes entre el encoding de entrada y todos los encodings de la colección
+            similarities = vectorized_cosine_similarity(input_encoding, np.array(encodings))
+
+            # Encontrar la mejor similitud (similitud máxima)
+            best_similarity_index = np.argmax(similarities)
+            best_similarity = similarities[best_similarity_index]
+
+            # Verificar si la mejor similitud supera el umbral
+            if best_similarity > 0.92:
+                doc = collection.find_one({'encoding': json.dumps(encodings[best_similarity_index].tolist())})
+                result = {
+                    'similitud': best_similarity,
+                    'nombre': doc['nombre'],
+                    'apellido': doc['apellido']
+                }
+            else:
+                result = None
+
+            response = jsonify({'Server': result})
+
+        # Agregar encabezados CORS a la respuesta
+        response.headers['Access-Control-Allow-Origin'] = '*'
+        response.headers['Access-Control-Allow-Methods'] = 'POST, OPTIONS'
+        response.headers['Access-Control-Allow-Headers'] = 'Content-Type'
+
+        resp = response
+        resp.status_code = 201
+        return resp
+    
+    except Exception as e:
+        response = jsonify({'Error': "Error al comparar", 'message': str(e)})
+        response.status_code = 500
+        return response
 
 @app.route('/recorteFacial', methods=['POST'])
 def upload_file():
