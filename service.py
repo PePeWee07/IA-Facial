@@ -138,11 +138,7 @@ def upload_file():
 
         # Detectar caras en la imagen
         boxes, _ = mtcnn.detect(image)
-        
-        output_file_faces = output_file
-        imagen_file = cv2.imread(output_file_faces)
-        face_locations = face_recognition.face_locations(imagen_file)
-        print("FaceLocation: ", len(face_locations))
+    
 
         try:
             # Aquí se realiza el corte de las imágenes
@@ -160,14 +156,14 @@ def upload_file():
                     
                     
                     #------------Codificar Code: Codificamos cada una de las imagenes------------
-                    # output_file_faces = "./faces/" + str(i) + ".png"
-                    # imagen_file = cv2.imread(output_file_faces)
-                    # face_locations = face_recognition.face_locations(imagen_file)
-                    # print("FaceLocation: ", len(face_locations))
+                    output_file_faces = "./faces/" + str(i) + ".png"
+                    imagen_file = cv2.imread(output_file_faces)
+                    face_locations = face_recognition.face_locations(imagen_file, number_of_times_to_upsample=2, model="hog")
+                    print("FaceLocation: ", len(face_locations))
                     
                     imgBase64 = base64.b64encode(open('./faces/' + str(i) + ".png", 'rb').read()).decode('utf-8')
                     i += 1
-                    if len(face_locations) > 0:
+                    if len(face_locations) >= 0:
                         face_loc = face_locations[0]
                     
                         face_image_encodings = face_recognition.face_encodings(imagen_file, known_face_locations=[face_loc])[0]
@@ -201,7 +197,6 @@ def upload_file():
                         resp.status_code = 400
                         return resp
         except Exception as e:
-            # Manejar la excepción específica aquí, por ejemplo, mostrar un mensaje de error
             print("Error-Bucle:", str(e))
         
         resp = jsonify({'server': json_list})
