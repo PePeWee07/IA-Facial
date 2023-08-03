@@ -3,7 +3,7 @@ import face_recognition
 import json
 import os
 
-image = "./faces/11.png"
+image = "./faces/5.png"
 imagen_file = cv2.imread(image)
 
 

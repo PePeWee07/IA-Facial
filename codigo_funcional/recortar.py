@@ -5,7 +5,7 @@ from facenet_pytorch import MTCNN
 import matplotlib.pyplot as plt
 import face_recognition
 
-imagesPath = "./imagen/grupo.png"
+imagesPath = "./imagen/group.jpg"
 
 if not os.path.exists("faces"):
     os.makedirs("faces")
