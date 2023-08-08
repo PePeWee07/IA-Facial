@@ -145,7 +145,7 @@ def reconocer():
 def upload_file():
     try:
 
-        # Lista para almacenar los objetos JSON
+        # Lista para almacenar los objetos JSON---
         json_list = []
 
        # check if the post request has the file part
