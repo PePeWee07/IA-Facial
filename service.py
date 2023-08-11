@@ -23,7 +23,7 @@ CORS(app, resources={
     r"/borrar_contenido": {"origins": "http://localhost:4200"}
 })
 
-# Conectarse a la base de datos de MongoDB
+# Conectarse a la base de datos de MongoDB te quiero mucho <3
 client = pymongo.MongoClient('mongodb://localhost:27017')
 database = client['reconocimiento']
 collection = database['personas']
