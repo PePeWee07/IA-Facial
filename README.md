@@ -49,3 +49,7 @@ Esperamos que este proyecto te resulte útil y educativo. Si tienes alguna pregu
 ¡Diviértete explorando y desarrollando con nuestro proyecto!
 
 **El Equipo de Desarrollo**
+
+Jose Roman, 
+Gustavo Yansa, 
+Jorge tenezaca
