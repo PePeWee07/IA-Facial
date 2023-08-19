@@ -31,7 +31,7 @@
 4. **Ejecutar la Aplicación:** Ejecuta la aplicación utilizando el siguiente comando:
 
    ```
-   python app.py
+   python service.py
    ```
 
 5. **Acceder a la Interfaz de Usuario:** Abre tu navegador web y navega a `http://localhost:5000` para acceder a la interfaz de usuario. Desde allí, podrás cargar imágenes y ver los resultados de la detección de rostros.
