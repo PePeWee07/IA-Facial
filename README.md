@@ -52,4 +52,4 @@ Esperamos que este proyecto te resulte útil y educativo. Si tienes alguna pregu
 
 Jose Roman, 
 Gustavo Yansa, 
-Jorge tenezaca
+Jorge Tenezaca
